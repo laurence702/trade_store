@@ -7,16 +7,19 @@ import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
 import ButtonSpinner from "@/components/globals/ButtonSpinner";
 import * as firebase from "firebase";
+import Cloudinary, { CldImage, CldTransformation } from "cloudinary-vue";
+
+Vue.use(Cloudinary, {
+  //cloudinary SDK init
+  configuration: { cloudName: "CLOUDNAMETEST" },
+  components: {
+    CldImage,
+    CldTransformation,
+  },
+});
 
 UIkit.use(Icons);
 window.UIkit = UIkit;
-
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: "AIzaSyDYijZhRUtjsycGhy1UN37opA7TbcZ1AZU",
-  },
-  installComponents: true,
-});
 
 const firebaseConfig = {
   apiKey: "AIzaSyBXLIm01SBjQuoyIf8xsqXpshhdMUuaK64",

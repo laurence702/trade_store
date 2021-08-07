@@ -76,7 +76,6 @@
             <button-spinner ref="loadingButton" @click="register()"
               >Register</button-spinner
             >
-            <button>Register</button>
           </div>
         </form>
       </div>

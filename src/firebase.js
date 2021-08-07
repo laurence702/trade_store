@@ -19,9 +19,8 @@ const config = {
   appId: "1:37739589002:web:9bf428c43650763ef7ec73",
   measurementId: "G-V8TKLQ8YL9"
 };
-
 const fb = firebase.initializeApp(config);
 const firestore = firebase.firestore();
 const firebaseauth = firebase.auth();
 
-export { firestore, fb, firebaseauth };
+export { firestore, fb, firebase,firebaseauth };
