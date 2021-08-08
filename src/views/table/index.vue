@@ -16,8 +16,7 @@
             />
             <button
               class="btn btn-outline-success my-2 my-sm-0"
-              @click="getProductsAsync"
-              type="submit"
+              @click.prevent="getProductsAsync('asc')"
             >
               refresh
             </button>
@@ -74,6 +73,7 @@
               </svg>
             </button>
           </th>
+          <th scope="col">image</th>
         </tr>
       </thead>
       <tbody>
@@ -89,6 +89,15 @@
           <td>
             {{ item.location }}
           </td>
+          <td>
+           
+            <img
+              class="list-complete-img"
+              :src="`${item.Url || ''}`"
+              alt="image"
+              height="30px" width="30px"
+            />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -97,17 +106,15 @@
 
 <script>
 import Modal from "./Modal.vue";
-import Places from "../places";
 import { firestore, fb } from "../../firebase";
 export default {
   name: "Table",
   components: {
     Modal,
-    Places,
   },
   mounted() {
-    console.log("component mounted");
     this.getProducts();
+    console.log("component mounted");
   },
   data() {
     return {
@@ -118,40 +125,39 @@ export default {
   },
   methods: {
     getProducts: async function () {
-      //e.preventDefault();
       firestore
         .collection("products")
-        .orderBy("createdAt", this.sortParam)
+        .orderBy("createdAt", "asc")
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            // console.log(`${doc.id} => ${doc.data()}`);
-            console.log(this.products.push(doc.data()));
+            this.products.push(doc.data());
+            console.log("Im fetching products...");
           });
         });
     },
-    getProductsAsync: async function (e) {
-      e.preventDefault();
+    getProductsAsync: function (sort) {
+      console.log(this.reset());
       firestore
         .collection("products")
-        .orderBy("createdAt", this.sortParam)
+        .orderBy("createdAt", sort)
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            // console.log(`${doc.id} => ${doc.data()}`);
-            console.log(this.products.push(doc.data()));
+            this.products.push(doc.data());
           });
         });
+    },
+    reset: function () {
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     setSortUp: function () {
-      this.sortParam = "asc";
-      console.log("I was sorted ", this.sortParam);
-      this.getProducts();
+      this.getProductsAsync("asc");
+      console.log("I was sorted asc");
     },
     setSortDown: function () {
-      this.sortParam = "desc";
-      console.log("I was sorted ", this.sortParam);
-      this.getProducts();
+      this.getProductsAsync("desc");
+      console.log("I was sorted desc");
     },
   },
 

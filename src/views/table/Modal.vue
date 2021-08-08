@@ -6,6 +6,7 @@
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    v-if="modalShow"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -64,7 +65,7 @@
             ></place-autocomplete-field>
             <div>
               <button
-                @click="openUploadWidget"
+                @click="openUploadModal"
                 id="upload_widget"
                 type="button"
                 class="cloudinary-button btn-primary"
@@ -74,7 +75,7 @@
 
               <button-spinner
                 ref="loadingButton"
-                @click="saveData"
+                @click.prevent="handleSubmit"
                 type="submit"
                 class="btn btn-primary"
               >
@@ -93,14 +94,18 @@ import { firestore, firebase } from "../../firebase";
 import Vue from "vue";
 import VuePlaceAutocomplete from "vue-place-autocomplete";
 import { settings } from "../../settings";
+import Table from "./index.vue";
 
 Vue.use(VuePlaceAutocomplete); //places SDK init
 
 export default {
   name: "Modal",
-  components: {},
+  components: {
+   Table
+  },
   data() {
     return {
+      modalShow:true,
       product: {
         name: "",
         price: "",
@@ -112,25 +117,24 @@ export default {
     };
   },
   methods: {
-    saveData: async function (e) {
-      e.preventDefault();
-      console.log(this.product.location);
+    handleSubmit: async function () {
       try {
-        e.preventDefault();
         this.$refs.loadingButton.startLoading();
         const docRef = await firestore.collection("products").add(this.product);
         console.log("Document written with ID=>", docRef.id);
         this.$refs.loadingButton.stopLoading();
-        this.$snack.success({
-          text: "Success",
-        });
+        if(docRef.id != undefined || docRef.id != ""){
+          this.$snack.success({
+            text: "Success",
+          });
+        }
         typeof docRef.id == "string" ? refresh() : throwError;
+         this.modalShow = false
         function refresh() {
           setInterval(() => {
             location.reload();
           }, 1500);
         }
-        refresh();
         function throwError() {
           throw "failed to save";
         }
@@ -140,50 +144,25 @@ export default {
         });
       }
     },
-
-    getProducts: async function () {
-      firestore
-        .collection("products")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            console.log(this.products.push(doc.data()));
-          });
-        });
-    },
-    createWidgetEventListener: function () {
-       function another() {
-        const myWidget = cloudinary.createUploadWidget(
+    openUploadModal: function () {
+      window.cloudinary
+        .openUploadWidget(
           {
-            cloudName: settings.CLOUDNAMETEST,
-            uploadPreset: settings.PRESETTEST,
+            cloud_name: settings.CLOUDNAMETEST,
+            upload_preset: settings.PRESETTEST,
           },
-          function another (error, result) {
-            
+          (error, result) => {
             if (!error && result && result.event === "success") {
-              console.log("Done! Here is the image info: ", result.info);
-              if (result.info !== undefined) {
-                const productUrl = result.info.secure_url;
-                const productImageId = result.info.public_id;
-                 this.product.Url = productUrl;
-              }
+              console.log("Done uploading..: ", result.info);
+              this.product.Url = result.info.secure_url;
+              this.product.ImageId = result.info.public_id;
+              console.log("URL: ",this.product.Url, "imageId: ", this.product.ImageId);
             }
           }
-        );
-        console.log("I hit the success block");
-        myWidget.open();
-      }
-      another(), console.log("I hit cloudinary error block");
-      false;
-    },
-    openUploadWidget: function (e) {
-      e.preventDefault();
-      document
-        .getElementById("upload_widget")
-        .addEventListener("click", this.createWidgetEventListener());
+        )
+        .open();
     },
   },
-  created() {},
 };
 </script>
 
