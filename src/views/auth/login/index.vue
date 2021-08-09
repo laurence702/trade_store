@@ -41,6 +41,16 @@
               >Log in</button-spinner
             >
           </div>
+          <div>
+            <p>
+              or sign in with Google
+              <i
+                class="fab fa-google btn btn primary"
+                style="color: #4c6ef5"
+                @click="socialLogin"
+              ></i>
+            </p>
+          </div>
         </div>
       </div>
       <div class="content content--side">
@@ -64,7 +74,7 @@
 <script>
 import img from "./img/login.jpg";
 import { AUTH_REQUEST } from "@/store/actions/auth";
-import firebase from "firebase";
+import { firebase } from "../../../firebase";
 
 export default {
   name: "Login",
@@ -73,7 +83,7 @@ export default {
       email: "",
       password: "",
       img: img,
-      authUser: null
+      authUser: null,
     };
   },
   methods: {
@@ -83,22 +93,36 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
+        .then((userCredential) => {
           this.$snack.success({
-            text: "Successfully signin in to " + this.$store.getters.appName
+            text: "Successfully signin in to " + this.$store.getters.appName,
           });
           var user = userCredential.user;
           this.$refs.loadingButton.stopLoading();
-          this.$router.push("/create-product");
+           console.log("result is ",user);
+           this.$router.push("/create-product");
         })
-        .catch(error => {
+        .catch((error) => {
+           console.log("result is ",error);
           this.$refs.loadingButton.stopLoading();
           this.$snack.danger({
-            text: error.message
+            text: error.message,
           });
         });
+    },
+     socialLogin: function(){
+        console.log("clicked");
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth().signInWithPopup(provider).then((result) =>{
+            this.$router.replace("/create-product");
+        }).catch((err) =>{
+            this.$snack.danger({
+            text: error.message
+          });
+        })
     }
-  }
+  },
 };
 </script>
 

@@ -4,6 +4,7 @@ import store from "../store";
 import Login from "@/views/auth/login";
 import Register from "@/views/auth/register";
 import Table from "@/views/table";
+import GoogleLogin from "../views/auth/login/GoogleLogin";
 import App from "@/views/layouts/App";
 import Home from "@/views/home";
 
@@ -11,11 +12,13 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
+    alert('Please sign in to continue');
     next();
     return;
   }
   next("/");
 };
+
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
@@ -58,7 +61,13 @@ export default new Router({
       path: "/create-product",
       name: "table",
       component: Table,
-      beforeEnter: ifNotAuthenticated
+      beforeEnter: ifAuthenticated
+    },
+    {
+      path: "/google-login",
+      name: "googlelogin",
+      component: GoogleLogin,
+      beforeEnter: ifAuthenticated
     }
   ]
 });
