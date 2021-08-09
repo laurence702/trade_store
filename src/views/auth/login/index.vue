@@ -118,7 +118,7 @@ export default {
             this.$router.replace("/create-product");
         }).catch((err) =>{
             this.$snack.danger({
-            text: error.message
+            text: err.message
           });
         })
     }

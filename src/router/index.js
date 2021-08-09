@@ -12,13 +12,11 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
-    console.log('Please sign in to continue');
     next();
     return;
   }
   next("/");
 };
-
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
@@ -61,13 +59,13 @@ export default new Router({
       path: "/create-product",
       name: "table",
       component: Table,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifNotAuthenticated
     },
     {
       path: "/google-login",
       name: "googlelogin",
       component: GoogleLogin,
-      beforeEnter: ifAuthenticated
+      beforeEnter: ifNotAuthenticated
     }
   ]
 });

@@ -41,6 +41,7 @@
     "lodash": "^4.17.20",
     "serve-static": "^1.14.1",
     "uikit": "^3.5.7",
+    "uuid-token-generator": "^1.0.0",
     "vue": "^2.6.12",
     "vue-meta": "^2.4.0",
     "vue-place-autocomplete": "^0.5.3",
