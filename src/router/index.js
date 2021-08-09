@@ -12,7 +12,7 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
-    alert('Please sign in to continue');
+    console.log('Please sign in to continue');
     next();
     return;
   }
