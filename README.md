@@ -13,11 +13,18 @@
 ![enter image description here](https://i.imgur.com/sEkYlzz.png)
 ![enter image description here](https://i.imgur.com/bVmb31s.png)
 
-## vue-cli 3
-For scaffolding of this app, [vue-cli 3](https://cli.vuejs.org/guide/) has been used, meaning, you get to use latest vue-cli 3 features, like [plugins](https://cli.vuejs.org/guide/plugins-and-presets.html#plugins).
-
 ## UIkit
 This project mainly uses [UIkit CSS framework](https://getuikit.com/). Though some bootstrap was used in bits
+
+### Tools
+
+```
+** This project uses Vue.Js on the frontend
+** google firebase for authentication and 
+** firestore for data storage
+** Cloudinary for assets storage while URL is saved to firestore
+** Google places API, and Geocoding service
+```
 
 #### If you want to change and use Bootstrap:
 ```
@@ -56,12 +63,12 @@ npm run build
 npm run lint
 ```
 ### Run your unit tests
-*Tests are not really written, but you can use Jest built-in into this boilerplate. Pull requests are welcome, as well. :)*
+*Tests are not really written, but hopefully I can add them in a later time :)*
 ```
 npm run test:unit
 ```
 ### File structure
-This is pretty much the default file structure that you get from scaffolding app from `vue-cli 3`, added stuff to suit the needs of the boilerplate.
+This is pretty much the default file structure that you get from scaffolding app from `vue-cli 3`, added stuff to suit the needs of the this prject.
 ```
 .
 |____.browserslistrc
@@ -121,6 +128,9 @@ This is pretty much the default file structure that you get from scaffolding app
 | | |____layouts
 | | | |____App
 | | | | |____index.vue
+| | |____table
+| | | |____index.vue
+| | | |____Modal.vue
 |____tests
 | |____unit
 | | |____.eslintrc.js
