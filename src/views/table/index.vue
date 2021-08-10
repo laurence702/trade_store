@@ -2,18 +2,14 @@
   <div class="container">
     <div class="row">
       <div class="mt-5 mb-0 col-lg-12">
-        <p>Hello {{ profileData.email || "" }}</p>
+        <p>Hello 
+            <span class="badge badge-pill badge-primary pt-2 pb-2">{{ profileData.email || "" }}</span>
+        </p>
       </div>
       <div class="col-lg-12 d-flex">
         <br /><br />
         <div class="mr-auto">
           <form class="form-inline">
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
             <button
               class="btn btn-outline-success my-2 my-sm-0"
               @click.prevent="getProductsAsync('asc')"

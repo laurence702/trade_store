@@ -77,7 +77,7 @@
                 ref="loadingButton"
                 @click.prevent="handleSubmit"
                 type="submit"
-                class="btn btn-primary p"
+                class="btn btn-primary"
               >
                 Submit
               </button-spinner>
@@ -111,7 +111,7 @@ export default {
         name: "",
         price: "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        location: "null",
+        location: null,
         Url: "",
         ImageId: "",
       },
