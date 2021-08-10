@@ -4,10 +4,10 @@
 
 ## Snapshots
 ### Login page
-![](https://i.imgur.com/DWpiAeP.jpg)
+![](https://res.cloudinary.com/jugunu/image/upload/v1628608304/Screenshot_2021-08-10_at_16.15.04.png)
 ### Register page
 
-![enter image description here](https://i.imgur.com/fixDwai.png)
+![enter image description here](https://res.cloudinary.com/jugunu/image/upload/v1628608303/Screenshot_2021-08-10_at_16.15.43.png)
 *image get's clearer as you enter a more secure password. neat.*
 ### Home page
 ![enter image description here](https://res.cloudinary.com/jugunu/image/upload/v1628607215/Screenshot_2021-08-10_at_14.24.43.png)
