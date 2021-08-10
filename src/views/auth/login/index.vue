@@ -75,6 +75,7 @@
 import img from "./img/login.jpg";
 import { AUTH_REQUEST } from "@/store/actions/auth";
 import { firebase } from "../../../firebase";
+import * as TokenGenerator from "uuid-token-generator";
 
 export default {
   name: "Login",
@@ -87,41 +88,44 @@ export default {
     };
   },
   methods: {
-    login() {
+     login: async function (){
       this.$refs.loadingButton.startLoading();
       const { email, password } = this;
-      firebase
+      await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+        .then(({user}) => {
+          //const tokgen = new TokenGenerator(); // Default is a 128-bit token encoded in base58
           this.$snack.success({
             text: "Successfully signin in to " + this.$store.getters.appName,
           });
-          var user = userCredential.user;
           this.$refs.loadingButton.stopLoading();
-           console.log("result is ",user);
-           this.$router.push("/create-product");
+          this.$router.push("/create-product");
         })
         .catch((error) => {
-           console.log("result is ",error);
+          console.log("result is ", error);
           this.$refs.loadingButton.stopLoading();
           this.$snack.danger({
             text: error.message,
           });
         });
     },
-     socialLogin: function(){
-        console.log("clicked");
-        const provider = new firebase.auth.GoogleAuthProvider();
+    socialLogin: function () {
+      console.log("clicked");
+      const provider = new firebase.auth.GoogleAuthProvider();
 
-        firebase.auth().signInWithPopup(provider).then((result) =>{
-            this.$router.replace("/create-product");
-        }).catch((err) =>{
-            this.$snack.danger({
-            text: err.message
-          });
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+         this.$router.push("/create-product");
         })
-    }
+        .catch((err) => {
+          this.$snack.danger({
+            text: err.message,
+          });
+        });
+    },
   },
 };
 </script>

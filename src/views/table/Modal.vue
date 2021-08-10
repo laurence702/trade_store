@@ -72,12 +72,12 @@
               >
                 Upload files
               </button>
-
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <button-spinner
                 ref="loadingButton"
                 @click.prevent="handleSubmit"
                 type="submit"
-                class="btn btn-primary"
+                class="btn btn-primary p"
               >
                 Submit
               </button-spinner>
@@ -101,17 +101,17 @@ Vue.use(VuePlaceAutocomplete); //places SDK init
 export default {
   name: "Modal",
   components: {
-   Table
+    Table,
   },
   data() {
     return {
-      modalShow:true,
+      modalShow: true,
       settings: settings,
       product: {
         name: "",
         price: "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        location: "32 oddo street, obalende",
+        location: "null",
         Url: "",
         ImageId: "",
       },
@@ -124,13 +124,13 @@ export default {
         const docRef = await firestore.collection("products").add(this.product);
         console.log("Document written with ID=>", docRef.id);
         this.$refs.loadingButton.stopLoading();
-        if(docRef.id != undefined || docRef.id != ""){
+        if (docRef.id != undefined || docRef.id != "") {
           this.$snack.success({
             text: "Success",
           });
         }
         typeof docRef.id == "string" ? refresh() : throwError;
-         this.modalShow = false
+        this.modalShow = false;
         function refresh() {
           setInterval(() => {
             location.reload();
@@ -157,7 +157,12 @@ export default {
               console.log("Done uploading..: ", result.info);
               this.product.Url = result.info.secure_url;
               this.product.ImageId = result.info.public_id;
-              console.log("URL: ",this.product.Url, "imageId: ", this.product.ImageId);
+              console.log(
+                "URL: ",
+                this.product.Url,
+                "imageId: ",
+                this.product.ImageId
+              );
             }
           }
         )

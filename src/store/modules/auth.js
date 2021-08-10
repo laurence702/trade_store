@@ -34,6 +34,9 @@ const actions = {
           dispatch(USER_REQUEST);
           resolve(resp);
         })
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
         .catch(err => {
           commit(AUTH_ERROR, err);
           localStorage.removeItem("user-token");
