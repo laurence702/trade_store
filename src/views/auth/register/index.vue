@@ -14,7 +14,7 @@
             <input
               class="form__input"
               type="text"
-              v-model="first_name"
+              v-model="user.first_name"
               id="first_name"
             />
           </div>
@@ -23,7 +23,7 @@
             <input
               class="form__input"
               type="text"
-              v-model="last_name"
+              v-model="user.last_name"
               id="last_name"
             />
           </div>
@@ -32,7 +32,7 @@
             <input
               class="form__input"
               type="email"
-              v-model="email"
+              v-model="user.email"
               id="email"
             />
           </div>
@@ -42,7 +42,7 @@
               <input
                 class="form__input"
                 type="password"
-                v-model="password"
+                v-model="user.password"
                 id="password"
               />
               <p class="form__password-strength" id="strength-output"></p>
@@ -93,39 +93,46 @@
 import img from "./img/register.jpg";
 import axios from "axios";
 import { AUTH_SIGNUP } from "@/store/actions/auth";
-import firebase from "firebase";
+import { firestore, firebase,firebaseauth } from "../../../firebase";
 
 export default {
   data() {
     return {
       img: img,
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      authUser: null
+      user: [],
+      registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+      role: "admin",
+      authUser: null,
     };
   },
 
   methods: {
-    register() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.$snack.success({
-            text: "Success"
+    async register() {
+      try {
+        console.log("user data to send: ", this.user);
+        const isReged = await firebaseauth.createUserWithEmailAndPassword(
+          this.user.email,
+          this.user.password
+        );
+        if (isReged) {
+          const docRef = await firestore.collection("users").add({
+            first_name: this.user.first_name,
+            last_name: this.user.last_name,
+            email: this.user.email,
+            role: this.role,
+            createdAt: this.registeredAt
           });
-        })
-        .then(() => {
-          this.$refs.loadingButton.startLoading();
-        })
-        .then(() => {
-          this.$router.push("/");
-        })
-        .catch(error => {
-          alert(error.message);
-        });
+          console.log("user now added to firestore");
+          this.$snack.success({
+            text: "Success",
+          });
+          console.log(docRef.id);
+        }
+        this.$refs.loadingButton.startLoading();
+        this.$router.push("/");
+      } catch (error) {
+        console.log(error.message);
+      }
 
       const { first_name, last_name, email, password } = this;
       // this.$store
@@ -146,7 +153,7 @@ export default {
       //       text: error.message
       //     });
       //   });
-    }
+    },
   },
   // created(){
   //   firebase.auth().onAuthStateChanged( (user) =>{
@@ -161,7 +168,7 @@ export default {
       1: "Bad",
       2: "Weak",
       3: "Good",
-      4: "Strong"
+      4: "Strong",
     };
     const canvasWrapper = document.querySelector(".canvas-wrap");
     const canvas = canvasWrapper.querySelector("canvas");
@@ -268,7 +275,7 @@ export default {
         val !== "" ? `Password strength: ${strengthStr[result.score]}` : "";
       render();
     });
-  }
+  },
 };
 </script>
 

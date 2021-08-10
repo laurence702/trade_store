@@ -20,6 +20,7 @@ require("firebase/auth");
 //   appId: process.env.VUE_APP_APP_ID,
 //   measurementId: process.env.VUE_APP_MEASUREMENT_ID,
 // };
+
 const config = {
   apiKey: "AIzaSyBXLIm01SBjQuoyIf8xsqXpshhdMUuaK64",
   authDomain: "trade-depot-1819b.firebaseapp.com",
